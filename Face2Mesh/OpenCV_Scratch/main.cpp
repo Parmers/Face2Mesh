@@ -32,34 +32,56 @@ string face_cascade_path, eye_cascade_path, nose_cascade_path, mouth_cascade_pat
 int main(int argc, char** argv)
 {
     cv::CommandLineParser parser(argc, argv,
-            "{eyes||}{nose||}{mouth||}{help h||}{@image||}{@facexml||}");
+            "{eyes||}{nose||}{mouth||}{help h||}{@facexml||}");
     if (parser.has("help"))
     {
         help(argv);
         return 0;
     }
-    input_image_path = parser.get<string>("@image");
+    //input_image_path = parser.get<string>("@image");
     face_cascade_path = parser.get<string>("@facexml");
     eye_cascade_path = parser.has("eyes") ? parser.get<string>("eyes") : "";
     nose_cascade_path = parser.has("nose") ? parser.get<string>("nose") : "";
     mouth_cascade_path = parser.has("mouth") ? parser.get<string>("mouth") : "";
-    if (input_image_path.empty() || face_cascade_path.empty())
+    if (face_cascade_path.empty())
     {
         cout << "IMAGE or FACE_CASCADE are not specified";
         return 1;
     }
     // Load image and cascade classifier files
-    Mat image;
-    image = imread(samples::findFile(input_image_path));
+    
+    VideoCapture cap;
+    // open the default camera, use something different from 0 otherwise;
+    // Check VideoCapture documentation.
+    if(!cap.open(0))
+        return 0;
+    for(;;)
+    {
+         
+          Mat frame;
+          vector<Rect_<int> > faces;
+          cap >> frame;
+          if( frame.empty() ) break; // end of video stream
+        
+        detectFaces(frame, faces, face_cascade_path);
+           detectFacialFeaures(frame, faces, eye_cascade_path, nose_cascade_path, mouth_cascade_path);
+          imshow("this is you, smile! :)", frame);
+        
+          if( waitKey(10) == 27 ) break; // stop capturing by pressing ESC
+    }
+    
+    
+//    Mat image;
+//    image = imread(samples::findFile(input_image_path));
 
     // Detect faces and facial features
-    vector<Rect_<int> > faces;
-    detectFaces(image, faces, face_cascade_path);
-    detectFacialFeaures(image, faces, eye_cascade_path, nose_cascade_path, mouth_cascade_path);
+//    vector<Rect_<int> > faces;
+//    detectFaces(image, faces, face_cascade_path);
+//    detectFacialFeaures(image, faces, eye_cascade_path, nose_cascade_path, mouth_cascade_path);
 
-    imshow("Result", image);
+    //imshow("Result", image);
 
-    waitKey(0);
+   // waitKey(0);
     return 0;
 }
 
