@@ -1,5 +1,6 @@
-/* Samuel Parmer
- * Template Author: Samyak Datta (datta[dot]samyak[at]gmail.com)
+
+/* This program is builds on an openCV example  program by Samyak Datta (datta[dot]samyak[at]gmail.com)
+ *
  *
  * A program to detect facial feature points using
  * Haarcascade classifiers for face, eyes, nose and mouth
@@ -51,6 +52,7 @@ int main(int argc, char** argv)
     // Load image and cascade classifier files
     
     VideoCapture cap;
+    vector<Rect_<int> > faces;
     // open the default camera, use something different from 0 otherwise;
     // Check VideoCapture documentation.
     if(!cap.open(0))
@@ -59,13 +61,13 @@ int main(int argc, char** argv)
     {
          
           Mat frame;
-          vector<Rect_<int> > faces;
+          
           cap >> frame;
           if( frame.empty() ) break; // end of video stream
         
         detectFaces(frame, faces, face_cascade_path);
            detectFacialFeaures(frame, faces, eye_cascade_path, nose_cascade_path, mouth_cascade_path);
-          imshow("this is you, smile! :)", frame);
+          imshow("FACE", frame);
         
           if( waitKey(10) == 27 ) break; // stop capturing by pressing ESC
     }
