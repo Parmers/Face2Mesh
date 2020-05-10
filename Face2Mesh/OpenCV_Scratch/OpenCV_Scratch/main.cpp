@@ -1,5 +1,5 @@
-/*
- * Author: Samyak Datta (datta[dot]samyak[at]gmail.com)
+/* Samuel Parmer
+ * Template Author: Samyak Datta (datta[dot]samyak[at]gmail.com)
  *
  * A program to detect facial feature points using
  * Haarcascade classifiers for face, eyes, nose and mouth
